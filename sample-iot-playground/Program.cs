@@ -19,7 +19,6 @@ namespace sample_iot_playground
 
         static void Main(string[] args)
         {
-
             Console.WriteLine("Simulated device\n");
             deviceClient = DeviceClient.Create(
                 iotHubUri,
@@ -36,10 +35,21 @@ namespace sample_iot_playground
 
             while (true)
             {
+                var t = Temperature.Temperatures;
+                Console.WriteLine(Temperature.ToString(t));
+                double temp = t[0].CurrentValue;
+                foreach(var obj in t)
+                {
+                    if(obj.InstanceName == "CPU Package")
+                    {
+                        temp = obj.CurrentValue;
+                    }
+                }
+
                 var telemetryDataPoint = new
                 {
                     deviceId = deviceName,
-                    cpuTemperature = Temperature.Temperatures[0].CurrentValue
+                    cpuTemperature = temp
                 };
                 var messageString = JsonConvert.SerializeObject(telemetryDataPoint);
                 var message = new Message(Encoding.ASCII.GetBytes(messageString));

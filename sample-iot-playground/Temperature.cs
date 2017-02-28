@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Management;
+using OpenHardwareMonitor.Hardware;
 
 namespace sample_iot_playground
 {
@@ -15,20 +16,30 @@ namespace sample_iot_playground
         {
             get
             {
+                Computer computerHardware = new Computer();
+                computerHardware.CPUEnabled = true;
+                computerHardware.Open();
+
                 List<Temperature> result = new List<Temperature>();
-                try
+
+                foreach (var hardware in computerHardware.Hardware)
                 {
-                    ManagementObjectSearcher searcher = new ManagementObjectSearcher(@"root\WMI", "SELECT * FROM MSAcpi_ThermalZoneTemperature");
-                    foreach (ManagementObject obj in searcher.Get())
+                    if(hardware.HardwareType == HardwareType.CPU)
                     {
-                        Double temp = Convert.ToDouble(obj["CurrentTemperature"].ToString());
-                        temp = (temp - 2732) / 10.0;
-                        result.Add(new Temperature { CurrentValue = temp, InstanceName = obj["InstanceName"].ToString() });
+                        hardware.Update();
+                        foreach (IHardware subHardware in hardware.SubHardware)
+                            subHardware.Update();
+                        foreach(var sensor in hardware.Sensors)
+                        {
+                            if(sensor.SensorType == SensorType.Temperature)
+                            {
+                                if (sensor.Value != null)
+                                {
+                                    result.Add(new Temperature { CurrentValue = sensor.Value.Value, InstanceName = sensor.Name });
+                                }
+                            }
+                        }
                     }
-                }
-                catch (Exception)
-                {
-                    result.Add(new Temperature { CurrentValue = -999, InstanceName = "Error" });
                 }
                 return result;
             }
