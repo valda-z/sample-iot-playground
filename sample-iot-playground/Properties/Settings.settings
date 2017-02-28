@@ -1,0 +1,15 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="sample_iot_playground.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="IOTHubUri" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">valda.azure-devices.net</Value>
+    </Setting>
+    <Setting Name="DeviceKey" Type="System.String" Scope="User">
+      <Value Profile="(Default)">vqemWFL+s5PnpCKDcA2PEWJA5SYuvDfJjo6Vskgeewg=</Value>
+    </Setting>
+    <Setting Name="DeviceName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">MyDevice</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
